@@ -10,7 +10,7 @@
 
 // Intuition 2 improved: counting sort at every word so that the sorting costs O(W) for each word.
 // This is possible because each word only contain lower-case english letter and thus have a 
-// fixed, stable length.
+// fixed, stable maximum length.
 // Explanation on counting sort: https://blog.csdn.net/wgiyq/article/details/54583399
 
 func groupAnagrams(strs []string) [][]string {
