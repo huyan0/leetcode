@@ -1,5 +1,6 @@
 // Intuition: in all the index that can be reached from the current index, find the index 
-// i where i +  nums[i] gives the furthest result. Go to i, set it as cur, and repeat the // process. If i <= 0  and i + nums[i] < num[lenght -1] and i != length - 1, return false
+// i where i +  nums[i] gives the furthest result. Go to i, set it as cur, and repeat the 
+// process. If i <= 0  and i + nums[i] < num[lenght -1] and i != length - 1, return false
 func canJump(nums []int) bool {
     
     i, dest := 0, len(nums) - 1
