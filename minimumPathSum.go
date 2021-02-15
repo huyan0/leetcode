@@ -1,9 +1,7 @@
 // Non-negative numbers
 // (0,0) -> len(grid), len(grid[0]) (m-1, n - 1)
 // can only move down or move right -> each node has at most two neighbours
-
-import "fmt"
-import "math"
+// use dp memo
 
 func minPathSum(grid [][]int) int {
     
@@ -15,64 +13,39 @@ func minPathSum(grid [][]int) int {
     }
     
     m := len(grid[0])
-    dist := make([]([]int), n, m*n)
     
     for i, _ := range dist {
         dist[i] = make([]int, m)
-        for j, _ := range dist[i] {
-            dist[i][j] = math.MaxInt32
-        }
     }
     
-    visited := make([][]bool, n, m*n);
-    
-    for i, _ := range visited {
-        visited[i] =  make([]bool, m)
-    }
-    
+    // initialize starting position
     dist[0][0] = grid[0][0]
-    markAsVisited(0,0,visited)
-    calcTempDist(0, 0, dist, grid)
-
     
-    for !hasVisited(n-1, m-1, visited){
-            curN, curM := findMinNode(dist, visited)
-            markAsVisited(curN, curM, visited)
-            calcTempDist(curN, curM, dist, grid)
+    // initialize column zero
+    for i := 1; i < len(dist); i++ {
+        dist[i][0] = dist[i-1][0] + grid[i][0]
     }
-    fmt.Printf("%v", dist)
+    // initialize row zero 
+    for i := 1; i < len(dist[0]); i++ {
+        dist[0][i] = dist[0][i-1] + grid[0][i]
+    }
+    
+    for row := 1; row < n; row++ {
+        for col := 1; col < m; col++ {
+            dist[row][col] = minOf(dist[row-1][col], dist[row][col-1]) + grid[row][col]
+        } 
+    }
+    
+    
     return dist[n-1][m-1]
 }
 
-
-func markAsVisited(n,m int, visited [][]bool) {
-    visited[n][m] = true;
-} 
-
-func hasVisited(n,m int, visited [][]bool) bool {
-    return visited[n][m]
-}
-
-func findMinNode(dist [][]int, visited [][]bool) (n, m int){
-    min := math.MaxInt32
-    for i, arr := range dist {
-        for j, num := range arr {
-            if !hasVisited(i, j, visited) && num <= min {
-                min = num
-                n, m = i, j 
-            }
+func minOf(nums  ...int) int{
+    min := nums[0]
+    for _, num := range nums {
+        if num < min {
+            min = num
         }
     }
-    return
-}
-
-func calcTempDist(n, m int, dist, grid[][]int) {
-    // down
-    if n + 1 < len(dist)  && dist[n+1][m] > dist[n][m] + grid[n+1][m]{
-        dist[n+1][m] = dist[n][m] + grid[n+1][m]
-    }
-    // right
-    if m + 1 < len(dist[0]) &&  dist[n][m+1] > dist[n][m] + grid[n][m+1]{
-        dist[n][m+1] = dist[n][m] + grid[n][m+1]
-    }
+    return min
 }
